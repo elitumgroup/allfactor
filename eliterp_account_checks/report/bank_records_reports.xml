@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_bank_records_inbound_check" inherit_id="eliterp_account.report_bank_records_inbound">
+        <xpath expr="//thead/tr/th[2]" position="after">
+            <th t-if="doc.type_deposit=='checks_collected'">Fecha del cheque</th>
+        </xpath>
+        <xpath expr="//tbody" position="inside">
+            <tr t-if="doc.type_deposit=='checks_collected'" t-foreach="doc.deposit_line_checks_collected" t-as="line">
+                <td>
+                    <span t-field="line.account_id.name"/>
+                </td>
+                <td>
+                    <span t-field="line.name.name"/>
+                </td>
+                <td>
+                    <span t-field="line.check_date"/>
+                </td>
+                <td class="text-right">
+                    <span t-if="line.amount > 0" t-field="line.amount"/>
+                    <span t-else="" t-field="line.amount_credit"/>
+                </td>
+            </tr>
+        </xpath>
+    </template>
+</odoo>

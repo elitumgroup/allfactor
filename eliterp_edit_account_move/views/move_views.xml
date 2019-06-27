@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_form_move_edit" model="ir.ui.view">
+        <field name="name">view_form_move_edit</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <field name="state" position="before">
+                <field name="editing" invisible="1"/>
+                <button name="action_edit" string="Editar asiento contable"
+                        type="object"
+                        attrs="{'invisible': [('state', '!=', 'posted'), ('editing', '=', True)]}"
+                        class="oe_highlight"
+                        groups="eliterp_edit_account_move.group_edit_account_move"/>
+                <button name="action_cancel_edit" string="Descartar edición"
+                        type="object"
+                        attrs="{'invisible': [('state', '!=', 'posted'), ('editing', '!=', True)]}"
+                        groups="eliterp_edit_account_move.group_edit_account_move"/>
+                <button name="action_update" states="posted" string="Actualizar asiento contable"
+                        type="object"
+                        attrs="{'invisible': [('state', '!=', 'posted'), ('editing', '!=', True)]}"
+                        class="oe_highlight"
+                        groups="eliterp_edit_account_move.group_edit_account_move"/>
+            </field>
+        </field>
+    </record>
+</odoo>

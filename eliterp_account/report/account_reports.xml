@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <template id="report_account_move">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-set="report_code">CONT-002-ASC-V1</t>
+                    <t t-set="report_title">ASIENTO CONTABLE</t>
+                    <t t-set="name" t-value="doc.name"/>
+                    <t t-set="flag">0</t>
+                    <t t-call="web.external_layout">
+                        <div class="page">
+
+                            <div id="informations" class="row mt32 mb32">
+                                <div class="col-3">
+                                    <strong>Fecha Documento:</strong>
+                                    <p t-field="doc.date"/>
+                                </div>
+                                <div class="col-3">
+                                    <strong>Diario:</strong>
+                                    <p t-field="doc.journal_id"/>
+                                </div>
+                                <div class="col-6" t-if="doc.ref">
+                                    <strong>Referencia:</strong>
+                                    <p t-field="doc.ref"/>
+                                </div>
+                            </div>
+
+                            <table class="table table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">Cuenta contable</th>
+                                        <th class="text-center">Empresa</th>
+                                        <th class="text-center">Detalle</th>
+                                        <th class="text-right">Debe</th>
+                                        <th class="text-right">Haber</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="doc.line_ids" t-as="line">
+                                        <td>
+                                            <span t-esc="'%s %s' % (line.account_id.code, line.account_id.name)"/>
+                                        </td>
+                                        <td>
+                                            <span t-if="line.partner_id" t-field="line.partner_id"/>
+                                            <t t-else="">-</t>
+                                        </td>
+                                        <td>
+                                            <span t-field="line.name"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="line.debit"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="line.credit"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr style="border-top: 3px solid black; font-size:15px;">
+                                        <td colspan="4" class="text-right">
+                                            <span t-esc='"%.2f" % sum(line.debit for line in doc.line_ids)'/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc='"%.2f" % sum(line.credit for line in doc.line_ids)'/>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+        <report
+                id="action_report_account_move"
+                model="account.move"
+                string="Asiento contable"
+                report_type="qweb-pdf"
+                name="eliterp_account.report_account_move"
+                file="eliterp_account.report_account_move"
+                print_report_name="'Asiento contable %s' % (object.name or '/')"
+                paperformat="eliterp_core.my_paperformat_a4_portrait"
+        />
+    </data>
+</odoo>

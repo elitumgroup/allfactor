@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="view_form_order_electronic_voucher" model="ir.ui.view">
+            <field name="name">view_form_order_electronic_voucher</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale_management.sale_order_view_form"/>
+            <field name="arch" type="xml">
+                <!--Ocutamos los botones originales para crear factura-->
+                <xpath expr="//button[@name='%(sale.action_view_sale_advance_payment_inv)d']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//button[@name='%(sale.action_view_sale_advance_payment_inv)d']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <!--TODO: Revisar si colocamos campo 'is_electronic'
+                Nuevo botón para generar factura y sin engtrega de productos (Guía de remisión)-->
+                <xpath expr="//button[@name='action_quotation_send']" position="before">
+                    <button name="make_electronic_invoice"
+                            string="Crear factura"
+                            groups="account.group_account_invoice"
+                            type="object" class="btn-primary"
+                            attrs="{'invisible': [('invoice_status', '!=', 'to invoice')]}"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

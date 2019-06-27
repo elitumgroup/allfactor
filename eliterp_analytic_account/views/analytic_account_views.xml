@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!--Project-->
+        <record id="view_form_analytic_account_project" model="ir.ui.view">
+            <field name="name">view_form_analytic_account_project</field>
+            <field name="model">account.project</field>
+            <field name="inherit_id" ref="eliterp_account_project.view_form_project"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook" position="inside">
+                    <page string="Centros de costo" name="analytic_account">
+                        <field name="analytic_account_ids"
+                               domain="[('company_id','=', company_id)]">
+                            <tree>
+                                <field name="complete_name"/>
+                                <field name="code"/>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <!--Analytic-->
+        <record id="view_tree_analytic_account" model="ir.ui.view">
+            <field name="name">view_tree_analytic_account</field>
+            <field name="model">account.analytic.account</field>
+            <field name="inherit_id" ref="analytic.view_account_analytic_account_list"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="replace">
+                    <field name="complete_name"/>
+                </xpath>
+            </field>
+        </record>
+        <record id="view_form_analytic_account" model="ir.ui.view">
+            <field name="name">view_form_analytic_account</field>
+            <field name="model">account.analytic.account</field>
+            <field name="inherit_id" ref="analytic.view_account_analytic_account_form"/>
+            <field name="arch" type="xml">
+                <field name="group_id" position="replace"/>
+                <xpath expr="//h1" position="before">
+                    <h1>
+                        <field name="group_id" required="1" options="{'no_open':True,'no_create':True}"/>
+                    </h1>
+                </xpath>
+                <xpath expr="//field[@name='company_id']" position="replace">
+                    <field name="company_id" invisible="1"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!--Invoice-->
+        <record id="view_form_invoice_analytic_account" model="ir.ui.view">
+            <field name="name">view_form_invoice_analytic_account</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='account_analytic_id']"
+                       position="replace">
+                    <field name="account_analytic_id"
+                           groups="analytic.group_analytic_accounting"
+                           domain="[('project_ids','in', [parent.project_id])]"
+                           options="{'no_create': True}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_form_invoice_supplier_analytic_account" model="ir.ui.view">
+            <field name="name">view_form_invoice_supplier_analytic_account</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_supplier_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='account_analytic_id']"
+                       position="replace">
+                    <field name="account_analytic_id"
+                           groups="analytic.group_analytic_accounting"
+                           domain="[('project_ids','in', [parent.project_id])]"
+                           options="{'no_create': True}"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

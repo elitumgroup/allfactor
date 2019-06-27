@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!--Partner-->
+        <record id="view_form_partner_sri_electronic" model="ir.ui.view">
+            <field name="name">view_form_partner_sri_electronic</field>
+            <field name='model'>res.partner</field>
+            <field name='inherit_id' ref='eliterp_sri.view_form_res_partner_sri'/>
+            <field name='arch' type='xml'>
+                <xpath expr="//field[@name='website']" position="before">
+                    <field name="email_optional"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!--Company-->
+        <record id="view_form_company_sri_electronic" model="ir.ui.view">
+            <field name="name">view_form_company_sri_electronic</field>
+            <field name="model">res.company</field>
+            <field name="inherit_id" ref="base.view_company_form"/>
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page groups="base.group_erp_manager" string="Configuración de comprobantes electrónicos">
+                        <groups>
+                            <group col="4">
+                                <field name="type_service"/>
+                                <field name="type_emission"/>
+                                <field name="environment"/>
+                                <field name="email_voucher_electronic" widget="email"/>
+                            </group>
+                        </groups>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+    </data>
+</odoo>
