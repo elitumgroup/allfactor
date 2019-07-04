@@ -11,6 +11,7 @@
                 <label for="new_sequence_check" string="Actual/A actualizar"/>
                 <div class="o_row" attrs="{'invisible': [('check_printing_payment_method_selected', '=', False)]}">
                     <field name="current_sequence_check"/>
+                    <span>/</span>
                     <field name="new_sequence_check"/>
                     <button name="update_sequence_check"
                             type="object"
