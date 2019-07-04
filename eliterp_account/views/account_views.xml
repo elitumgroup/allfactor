@@ -72,6 +72,7 @@
                 <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='invoice_line_tax_ids']"
                        position="replace">
                     <field name="invoice_line_tax_ids" widget="many2many_tags"
+                           required="1"
                            options="{'no_create': True}" context="{'type':parent.type}"
                            domain="[('type_tax_use','=','sale'), ('tax_type','=','iva'), ('company_id', '=', parent.company_id)]"/>
                 </xpath>
