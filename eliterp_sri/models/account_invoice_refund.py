@@ -106,7 +106,7 @@ class Invoice(models.Model):
 
         values['journal_id'] = journal_id.id
         values['type'] = TYPE2REFUND[invoice['type']]
-        values['date_invoice'] = date_invoice or fields.Date.context_today(invoice)
+        values['date_invoice'] = fields.Date.today()
         values['state'] = 'draft'
         values['number'] = False
         values['origin'] = invoice.reference
