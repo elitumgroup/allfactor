@@ -7,15 +7,16 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='outbound_payment_method_ids']" position="after">
                 <field name="start_check"
-                       attrs="{'invisible': [('check_printing_payment_method_selected', '=', False)],
-                    'required': [('check_printing_payment_method_selected', '=', True)]}"/>
-                <field name="check_padding"
-                       attrs="{'invisible': [('check_printing_payment_method_selected', '=', False)],
-                    'required': [('check_printing_payment_method_selected', '=', True)]}"/>
-                <xpath expr="//field[@name='check_sequence_id']" position="replace">
-                    <field name="check_sequence_id"
-                           groups="base.group_erp_manager"/>
-                </xpath>
+                       attrs="{'invisible': [('check_printing_payment_method_selected', '=', False)],                     'required': [('check_printing_payment_method_selected', '=', True)], 'readonly': [('check_next_number', '!=', False)]}"/>
+                <label for="new_sequence_check" string="Actual/A actualizar"/>
+                <div class="o_row" attrs="{'invisible': [('check_printing_payment_method_selected', '=', False)]}">
+                    <field name="current_sequence_check"/>
+                    <field name="new_sequence_check"/>
+                    <button name="update_sequence_check"
+                            type="object"
+                            string="Actualizar"
+                            class="oe_link"/>
+                </div>
             </xpath>
         </field>
     </record>

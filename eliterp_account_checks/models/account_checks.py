@@ -23,10 +23,20 @@ class Journal(models.Model):
             'company_id': self.company_id.id,
         })
 
+    @api.one
+    def update_sequence_check(self):
+        self.check_sequence_id.sudo().update(
+            {'number_next_actual': self.new_sequence_check}
+        )
+        return True
+
     start_check = fields.Integer('Inicio de cheques', default=1, copy=False)
     check_padding = fields.Integer('Dígitos', default=6, help="Cantidad de dígitos en el talonario de la chequera.")
     # TODO: Revisar qué al cambiar no tengamos cheques realizados
-
+    current_sequence_check = fields.Integer('Cheque actual (secuencia)',
+                                            related='check_sequence_id.number_next_actual',
+                                            readonly=True)
+    new_sequence_check = fields.Integer('Nueva secuencia (cheque)', default=1)
 
 class Checks(models.Model):
     _name = "account.checks"
