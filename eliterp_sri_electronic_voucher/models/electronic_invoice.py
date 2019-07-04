@@ -86,9 +86,10 @@ class Invoice(models.Model):
         # TODO: Revisar códigos, defecto 12%
         totalTaxes = []
         for tax in self.tax_line_ids:
+            ref = tax.tax_id.tax_group_id.tax_reference
             totalTax = {
                 'codigo': '2',
-                'codigoPorcentaje': '2',
+                'codigoPorcentaje': '2' if ref == '2' else '0',
                 'baseImponible': '{:.2f}'.format(tax.base),
                 'valor': '{:.2f}'.format(tax.amount)
             }
@@ -207,10 +208,11 @@ class Invoice(models.Model):
             if not line.invoice_line_tax_ids:
                 taxes.append(self._get_line_iva_0(line.price_subtotal))
             for tax_line in line.invoice_line_tax_ids:
+                ref = tax_line.tax_group_id.tax_reference
                 amount = (line.price_subtotal * tax_line.amount) /100
                 tax = {
                     'codigo': '2',
-                    'codigoPorcentaje': '2',
+                    'codigoPorcentaje': '2' if ref == '2' else '0',
                     'tarifa': "%s" % int(tax_line.amount),
                     'baseImponible': '{:.2f}'.format(line.price_subtotal),
                     'valor': '{:.2f}'.format(amount)
