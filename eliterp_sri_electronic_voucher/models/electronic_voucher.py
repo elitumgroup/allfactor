@@ -387,7 +387,9 @@ class ElectronicVoucher(models.Model):
             for m in c['mensaje']:
                 one_message = '[{0}] - {1} ({2})'.format(m['identificador'],
                                                          m['mensaje'],
-                                                         m['informacionAdicional'])
+                                                         m['tipo'])
+                if m['identificador'] == '43':
+                    one_message += ' => ' + c['claveAcceso']
                 errors.append(one_message)
         return errors
 

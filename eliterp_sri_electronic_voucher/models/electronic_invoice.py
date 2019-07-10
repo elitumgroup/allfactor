@@ -5,7 +5,6 @@ from odoo import api, models, fields
 from jinja2 import Environment, FileSystemLoader
 from . import utils
 
-
 PRODUCT_CODE = {
     'out_invoice': 'codigoPrincipal',
     'out_refund': 'codigoInterno'
@@ -81,7 +80,6 @@ class Invoice(models.Model):
         }
         return vals
 
-
     def _get_vals_total_taxes(self):
         # TODO: Revisar códigos, defecto 12%
         totalTaxes = []
@@ -89,7 +87,7 @@ class Invoice(models.Model):
             ref = tax.tax_id.tax_group_id.tax_reference
             totalTax = {
                 'codigo': '2',
-                'codigoPorcentaje': '2' if ref == '2' else '0',
+                'codigoPorcentaje': '2' if ref == 'i' else '0',
                 'baseImponible': '{:.2f}'.format(tax.base),
                 'valor': '{:.2f}'.format(tax.amount)
             }
@@ -180,7 +178,6 @@ class Invoice(models.Model):
             code = code.replace(f, r)
         return code
 
-
     def _get_vals_details(self):
         """
         Detalle de la factura (Líneas)
@@ -209,10 +206,10 @@ class Invoice(models.Model):
                 taxes.append(self._get_line_iva_0(line.price_subtotal))
             for tax_line in line.invoice_line_tax_ids:
                 ref = tax_line.tax_group_id.tax_reference
-                amount = (line.price_subtotal * tax_line.amount) /100
+                amount = (line.price_subtotal * tax_line.amount) / 100
                 tax = {
                     'codigo': '2',
-                    'codigoPorcentaje': '2' if ref == '2' else '0',
+                    'codigoPorcentaje': '2' if ref == 'i' else '0',
                     'tarifa': "%s" % int(tax_line.amount),
                     'baseImponible': '{:.2f}'.format(line.price_subtotal),
                     'valor': '{:.2f}'.format(amount)
@@ -234,7 +231,8 @@ class Invoice(models.Model):
             invoice.write({'electronic_voucher_id': electronic_voucher.id})
         return True
 
-    electronic_voucher_id = fields.Many2one('sri.electronic.voucher', string='Comprobante electrónico', readonly=True, copy=False)
+    electronic_voucher_id = fields.Many2one('sri.electronic.voucher', string='Comprobante electrónico', readonly=True,
+                                            copy=False)
     authorization_date = fields.Datetime(
         'Fecha autorización',
         related='electronic_voucher_id.authorization_date', store=True, readonly=True
