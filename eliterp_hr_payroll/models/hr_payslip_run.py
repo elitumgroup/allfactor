@@ -310,7 +310,7 @@ class PayslipRun(models.Model):
         self._create_line_expenses('NPP', journal_id, move_id, net_receive)  # Nómina a pagar
 
         total_credit = amount_advances + iess_personal + loan_unsecured + loan_mortgage
-        total_credit = total_credit + iess_patronal
+        total_credit = total_credit + iess_patronal + loan_payment_advance
         total_credit = total_credit + provision_reserve_funds + amount_provision_tenth_3
         total_credit = total_credit + amount_provision_tenth_4 + patronal + net_receive
         _logger.critical('-TOTAL HABER = %f\n' % round(total_credit, 2))

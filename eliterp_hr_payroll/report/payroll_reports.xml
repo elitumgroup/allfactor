@@ -250,15 +250,14 @@
                                 </div>
                                 <div class="col-3">
                                     <strong>Fecha documento:</strong>
-                                    <p t-field="doc.create_date"
-                                       t-options="{&quot;format&quot;: &quot;dd/MM/yyyy&quot;}"/>
+                                    <p t-field="doc.create_date" t-options="{&quot;format&quot;: &quot;dd/MM/yyyy&quot;}"/>
                                 </div>
                                 <div class="col-3">
                                     <strong>Período:</strong>
                                     <p t-esc="'Del %s hasta el %s' % (doc.date_start, doc.date_end)"/>
                                 </div>
                             </div>
-                            <table class="table table-condensed" style="font-size:9px">
+                            <table class="table table-condensed table-sm" style="font-size:10px">
                                 <thead>
                                     <tr>
                                         <th class="text-center">NOMBRE</th>
@@ -330,9 +329,10 @@
                                             <span t-esc="'%.2f' % line.net_receive"/>
                                         </td>
                                     </tr>
-
-                                    <tr style="border-top: 3px solid black; font-size:12px;">
-                                        <td colspan="4" class="text-right">TOTALES</td>
+                                </tbody>
+                                <tfoot>
+                                <tr style="border-top: 3px solid black; font-size:15px;">
+                                     <td colspan="4" class="text-right">TOTALES</td>
                                         <td class="text-center">
                                             <span t-esc="&quot;%.2f&quot; % sum(line.wage for line in doc.line_ids)"/>
                                         </td>
@@ -369,8 +369,8 @@
                                         <td class="text-right">
                                             <span t-esc="&quot;%.2f&quot; % sum(line.net_receive for line in doc.line_ids)"/>
                                         </td>
-                                    </tr>
-                                </tbody>
+                                </tr>
+                            </tfoot>
                             </table>
 
                             <div t-if="doc.comment">
