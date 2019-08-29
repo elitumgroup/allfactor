@@ -296,6 +296,7 @@ class PayslipRun(models.Model):
                                    loan_payment_advance)  # Préstamo anticipo quincena
         self._create_line_expenses('PRES_QUIRO', journal_id, move_id, loan_unsecured)  # Préstamo quirografario
         self._create_line_expenses('PRES_HIPO', journal_id, move_id, loan_mortgage)  # Préstamo hipotecario
+        self._create_line_expenses('IESS_17.60%', journal_id, move_id, iess_patronal)  # IEES 17.60%
         self._create_line_expenses('OEG', journal_id, move_id, other_expenses)  # Otros egresos
 
         # Creamos líneas de movimiento de provisión, PROVISIÓN VACACIONES
