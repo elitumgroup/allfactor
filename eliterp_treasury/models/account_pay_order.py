@@ -93,7 +93,7 @@ class PayOrderAbstract(models.AbstractModel):
     beneficiary = fields.Char('Beneficiario')
     # Campos para traer los diferentes documentos para la orden de pago
     invoice_ids = fields.Many2many('account.invoice', string='Facturas')
-    purchase_order_id = fields.Many2one('purchase.order', 'Orden de compra/servicio')
+    # purchase_order_id = fields.Many2one('purchase.order', 'Orden de compra/servicio')
     journal_id = fields.Many2one('account.journal', string="Banco de pago")
     comment = fields.Text('Notas y comentarios')
     company_id = fields.Many2one('res.company', 'Compañía')
