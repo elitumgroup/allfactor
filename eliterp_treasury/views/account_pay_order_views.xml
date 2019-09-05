@@ -68,7 +68,7 @@
                         <field name="company_id" invisible="1"/>
                         <!--Documentos origen-->
                         <field name="invoice_ids" invisible="1"/>
-                        <field name="purchase_order_id" invisible="1"/>
+                        <field name="invoice_ids" invisible="1"/>
                     </group>
                     <group string="Notas y comentarios">
                         <field name="comment" nolabel="1" placeholder="p.e Colocar referencia del pago"/>
@@ -147,8 +147,8 @@
                                 <field name="type" readonly="1"/>
                                 <field name="amount" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                 <!--Documentos relacionados, colocar aquí los de otras aplicaciones-->
-                                <field name="purchase_order_id"
-                                       attrs="{'readonly':[('state', '!=', 'draft')], 'invisible': [('purchase_order_id', '=', False)]}"/>
+                                <field name="invoice_ids"
+                                       attrs="{'readonly':[('state', '!=', 'draft')], 'invisible': [('type', '!=', 'invoice')]}"/>
                             </group>
                             <group>
                                 <field name="beneficiary" attrs="{'readonly':[('state', '!=', 'draft')]}"/>

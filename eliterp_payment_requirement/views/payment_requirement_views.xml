@@ -76,7 +76,7 @@
         <field name="model">account.pay.order</field>
         <field name="inherit_id" ref="eliterp_treasury.view_form_pay_order_wizard"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='purchase_order_id']" position="after">
+            <xpath expr="//field[@name='invoice_ids']" position="after">
                 <field name="payment_requirement_id" invisible="1"/>
             </xpath>
         </field>
@@ -87,7 +87,7 @@
         <field name="model">account.pay.order</field>
         <field name="inherit_id" ref="eliterp_treasury.view_form_pay_order"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='purchase_order_id']" position="after">
+            <xpath expr="//field[@name='invoice_ids']" position="after">
                 <field name="payment_requirement_id"
                        attrs="{'readonly':[('state', '!=', 'draft')], 'invisible': [('payment_requirement_id', '=', False)]}"/>
             </xpath>
