@@ -138,6 +138,8 @@ class ElectronicVoucher(models.Model):
     document_id = fields.Reference(string='Documento', readonly=True,
                                    selection=[('account.invoice', ''), ('account.retention', '')],
                                    help="Técnico: Referencia del modelo origen y su ID.", required=True)
+    name_partner_id = fields.Char('Empresa', compute='_compute_partner')
+    documentation_number_partner_id = fields.Char('RUC/Cédula', compute='_compute_partner')
     authorized_voucher_id = fields.Many2one('sri.authorized.vouchers', 'Tipo de comprobante', readonly=True,
                                             required=True)
     sri_authorization_id = fields.Many2one('sri.authorization', string='Autorización SRI', readonly=True,
@@ -155,6 +157,13 @@ class ElectronicVoucher(models.Model):
     company_id = fields.Many2one('res.company', string='Compañía', readonly=True)
 
     @api.multi
+    def _compute_partner(self):
+        for r in self:
+            partner = r.document_id.partner_id
+            r.name_partner_id = partner.name
+            r.documentation_number_partner_id = partner.documentation_number
+
+    @api.multi
     def run_scheduler(self):
         for ve in self.search([('state', '=', 'new')]):
             try:
@@ -163,6 +172,7 @@ class ElectronicVoucher(models.Model):
             except Exception as e:
                 _logger.exception("Envío de CE's al API falló.")
                 self.env.cr.rollback()
+
     @api.model
     def run_scheduler_email(self):
         """
