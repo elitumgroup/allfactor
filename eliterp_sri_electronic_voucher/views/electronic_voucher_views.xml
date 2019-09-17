@@ -208,6 +208,8 @@
                 >
                     <field name="create_date" string="Creado el"/>
                     <field name="document_id"/>
+                    <field name="name_partner_id"/>
+                    <field name="documentation_number_partner_id"/>
                     <field name="name"/>
                     <field name="authorization_date"/>
                     <field name="company_id" groups="base.group_multi_company"/>
