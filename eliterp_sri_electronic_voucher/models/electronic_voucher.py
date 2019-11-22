@@ -417,16 +417,14 @@ class ElectronicVoucher(models.Model):
 
     def _get_response(self, message):
         values = {}
-        if 'receptor' in message and not message['receptor']['isRecibida']:
+        if not message['receptor']['isRecibida'] and not message['autenticador']['isAutorizado']:
             values['comment'] = ', '.join(self._get_messages_receiver_sri(message['receptor']))
-            return values
-        if 'autenticador' in message:
-            if message['autenticador']['isAutorizado']:
-                values = self._update_document(message['autenticador'])
-            else:
-                messages = message['autenticador']['autorizaciones']
-                values['state'] = 'not_authorized_sri'
-                values['comment'] = ', '.join(self._get_messages_sri(messages))
+        elif message['autenticador']['isAutorizado']:
+            values = self._update_document(message['autenticador'])
+        else:
+            messages = message['autenticador']['autorizaciones']
+            values['state'] = 'not_authorized_sri'
+            values['comment'] = ', '.join(self._get_messages_sri(messages))
         return values
 
     def _get_url_api(self):
