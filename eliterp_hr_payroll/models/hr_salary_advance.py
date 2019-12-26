@@ -239,6 +239,16 @@ class SalaryAdvance(models.Model):
                 raise ValidationError(_("No podemos borrar anticipos diferentes de borrador."))
         return super(SalaryAdvance, self).unlink()
 
+    @api.multi
+    def action_button_cancel(self):
+        for r in self:
+            if r.state_pay_order != 'no credits':
+                raise ValidationError(_("No podemos anular anticipos de quincena con pagos."))
+            else:
+                if r.move_id:
+                    r.move_id.reverse_moves()
+                r.update({'state': 'cancel'})
+
     name = fields.Char('No. Documento', index=True, default='Nuevo anticipo')
     period = fields.Char('Período', compute='_compute_period', store=True)
     date = fields.Date('Fecha de emisión', default=fields.Date.context_today, required=True,
@@ -252,7 +262,8 @@ class SalaryAdvance(models.Model):
         ('to_approve', 'Por aprobar'),
         ('approve', 'Aprobado'),
         ('posted', 'Contabilizado'),
-        ('deny', 'Negado')], string="Estado", default='draft', track_visibility='onchange')
+        ('deny', 'Negado'),
+        ('cancel', 'Cancelado')], string="Estado", default='draft', track_visibility='onchange')
     approval_user = fields.Many2one('res.users', string='Aprobado por', group="hr_payroll.group_hr_payroll_manager")
     count_lines = fields.Integer('Nº empleados', compute='_compute_count_lines')
     comment = fields.Text('Notas y comentarios', track_visibility='onchange')
