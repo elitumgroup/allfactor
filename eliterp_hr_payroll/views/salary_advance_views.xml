@@ -93,7 +93,7 @@
         <field name="name">view_tree_salary_advance</field>
         <field name="model">hr.salary.advance</field>
         <field name="arch" type="xml">
-            <tree decoration-muted="state=='deny'"
+            <tree decoration-muted="state in ('deny', 'cancel')"
                   decoration-success="state == 'posted'"
                   decoration-bf="state == 'posted'"
             >
@@ -141,20 +141,21 @@
                     <button name="action_deny"
                             type="object"
                             states="to_approve"
-                            groups="hr_payroll.group_hr_payroll_manager"
                             string="Negar"/>
                     <button name="posted_advance"
                             states="approve"
                             type="object"
                             string="Contabilizar"
                             class="oe_highlight"/>
-
                     <field name="state_pay_order" invisible="1"/>
                     <button string="Generar orden de pago"
                             type="action"
                             name="%(action_salary_advance_pay_order)d"
                             attrs="{'invisible':['|', ('state','!=', 'posted'), ('state_pay_order', '=', 'paid')]}"
                             class="oe_highlight"/>
+                    <button name="action_button_cancel"
+                            groups="hr_payroll.group_hr_payroll_manager"
+                            string="Anular" type="object"/>
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
@@ -191,7 +192,7 @@
                         <group col="1">
                             <button name="load_employees"
                                     type="object"
-                                    attrs="{'invisible':[('state', 'in', ('posted', 'deny'))]}"
+                                    attrs="{'invisible':[('state', 'in', ('posted', 'deny', 'cancel'))]}"
                                     string="Cargar empleados"
                                     class="oe_highlight"/>
                         </group>
