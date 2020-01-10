@@ -237,7 +237,11 @@ class ElectronicVoucher(models.Model):
         self.ensure_one()
         mail_template = self._get_template()
         attachments = self._get_attachments()[0]
-        mail_template.send_mail(
+        local_context = self.env.context.copy()
+        local_context.update({
+            'email_cc': self.document_id.partner_id.email_optional or ''
+        })
+        mail_template.with_context(local_context).send_mail(
             self.document_id.id,
             email_values={'attachment_ids': [a.id for a in attachments]}
         )
