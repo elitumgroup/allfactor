@@ -133,6 +133,18 @@ class PayslipRun(models.Model):
         self.update({'state': 'to_approve'})
 
     @api.multi
+    def action_cancel(self):
+        self.ensure_one()
+        if self.state_pay_order != 'no credits':
+            raise UserError(_("No puede anular rol con pagos realizados!"))
+        if self.move_id:  # Anulamos el asiento contable
+            move = self.move_id
+            # TODO: move.reverse_moves(move.date, move.journal_id or False)
+        for rol in self.line_ids:
+            rol.role_id.update({'state': 'draft'})
+        self.update({'state': 'cancel'})
+
+    @api.multi
     def action_approve(self):
         """
         Aprobar rol consolidado
@@ -471,7 +483,8 @@ class PayslipRun(models.Model):
         ('to_approve', 'Por aprobar'),
         ('approve', 'Aprobado'),
         ('closed', 'Contabilizado'),
-        ('deny', 'Negado')
+        ('deny', 'Negado'),
+        ('cancel', 'Anulado')
     ], string='Estado', index=True, readonly=True, copy=False, default='draft', track_visibility='onchange')  # CM
     line_ids = fields.One2many('hr.payslip.run.line', 'payslip_run_id',
                                string="Líneas de rol consolidado")

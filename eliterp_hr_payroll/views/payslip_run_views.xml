@@ -121,6 +121,11 @@
                         name="%(action_payslip_run_pay_order)d"
                         attrs="{'invisible':['|', ('state','!=', 'closed'), ('state_pay_order', '=', 'paid')]}"
                         class="oe_highlight"/>
+                <button name="action_cancel"
+                        type="object"
+                        attrs="{'invisible':[('state', '=', 'cancel')]}"
+                        groups="hr_payroll.group_hr_payroll_manager"
+                        string="Anular"/>
             </button>
             <xpath expr="//label" position="replace">
             </xpath>
