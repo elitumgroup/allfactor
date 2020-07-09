@@ -11,22 +11,18 @@ TYPE2REFUND = {
     'in_refund': 'in_invoice',  # Vendor Credit Note
 }
 
-
 TYPEVOUCHER = {
     'out_invoice': '04',
     'in_invoice': '05',
 }
+
 
 class AccountInvoiceTax(models.Model):
     _inherit = 'account.invoice.tax'
 
     @api.model
     def create(self, values):
-        """
-        Si es nota de crédito se cambia impuestos a no manual
-        :param values:
-        :return:
-        """
+        """Si es nota de crédito se cambia impuestos a no manual"""
         if 'refund' in self._context:
             values.update({'manual': False})
         return super(AccountInvoiceTax, self).create(values)
@@ -101,9 +97,12 @@ class Invoice(models.Model):
 
         values['invoice_line_ids'] = self._refund_cleanup_lines(invoice.invoice_line_ids)
 
-        tax_lines = invoice.tax_line_ids
+        # Borramos impuestos de retención, al filtrar líneas (SOlO DE CLIENTE)
+        if invoice['type'] == 'out_invoice':
+            tax_lines = invoice.tax_line_ids.filtered(lambda x: x.tax_id.tax_type != 'retention')
+        else:
+            tax_lines = invoice.tax_line_ids
         values['tax_line_ids'] = self._refund_cleanup_lines(tax_lines)
-
         values['journal_id'] = journal_id.id
         values['type'] = TYPE2REFUND[invoice['type']]
         values['date_invoice'] = fields.Date.today()
@@ -117,7 +116,8 @@ class Invoice(models.Model):
         values['refund_invoice_id'] = invoice.id
         values['company_division_id'] = invoice.company_division_id.id
         values['project_id'] = invoice.project_id.id
-        values['authorized_voucher_id'] = self.env['sri.authorized.vouchers'].search([('code', '=', TYPEVOUCHER[invoice['type']])])[0].id
+        values['authorized_voucher_id'] = \
+            self.env['sri.authorized.vouchers'].search([('code', '=', TYPEVOUCHER[invoice['type']])])[0].id
         values['reference'] = False
         if invoice['type'] == 'out_invoice':
             values['point_printing_id'] = invoice.point_printing_id.id
@@ -160,11 +160,13 @@ class Invoice(models.Model):
             result = {'type': 'ir.actions.act_window_close'}
         return result
 
-    have_refund = fields.Boolean(compute="_compute_have_refund", string='Tiene nota de crédito?', help="Técnico: para saber si documento tiene nota de crédito.")
+    have_refund = fields.Boolean(compute="_compute_have_refund", string='Tiene nota de crédito?',
+                                 help="Técnico: para saber si documento tiene nota de crédito.")
 
 
 class Journal(models.Model):
     _inherit = 'account.journal'
 
     refund_journal_id = fields.Many2one('account.journal', domain=[('type', 'in', ('sale', 'purchase'))],
-                                        string="Diario (nota de crédito)", help="Debemos definir diario contable para nota contabilizar nota de crédito.")
+                                        string="Diario (nota de crédito)",
+                                        help="Debemos definir diario contable para nota contabilizar nota de crédito.")
