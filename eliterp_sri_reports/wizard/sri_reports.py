@@ -132,11 +132,11 @@ class Ats(models.TransientModel):
         for ret in self.env['account.retention'].search(domain_retention):
             authorization = ret.sri_authorization_id
             detalleanulados = {
-                'tipoComprobante': authorization.code,
-                'establecimiento': authorization.establishment,
-                'puntoEmision': authorization.emission_point,
-                'secuencialInicio': ret.withhold_number[8:17],
-                'secuencialFin': ret.withhold_number[8:17],
+                'tipoComprobante': authorization.authorized_voucher_id.code,
+                'establecimiento': ret.retention_number[:3],
+                'puntoEmision': ret.retention_number[4:7],
+                'secuencialInicio': ret.retention_number[8:17],
+                'secuencialFin': ret.retention_number[8:17],
                 'autorizacion': authorization.authorization
             }
             canceled.append(detalleanulados)
