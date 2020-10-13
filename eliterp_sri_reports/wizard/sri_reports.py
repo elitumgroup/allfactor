@@ -16,15 +16,15 @@ from operator import itemgetter
 STD_FORMAT = '%d/%m/%Y'
 
 ID_CUSTOMER = {
-    '0': '01',
-    '1': '02',
-    '2': '03'
-}
-
-ID_SUPPLIER = {
     '0': '04',
     '1': '05',
     '2': '06'
+}
+
+ID_SUPPLIER = {
+    '0': '01',
+    '1': '02',
+    '2': '03'
 }
 
 
@@ -644,7 +644,7 @@ class TaxesSummary(models.TransientModel):
                         data[-1][11] = line.price_subtotal
                     if ref == 'i0':
                         data[-1][12] = line.price_subtotal
-                    if ref== 'ni':
+                    if ref == 'ni':
                         data[-1][14] = line.price_subtotal
                     if ref == 'exi':
                         data[-1][15] = line.price_subtotal
