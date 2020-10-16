@@ -175,6 +175,7 @@ class Ats(models.TransientModel):
         domain = [
             ('state', 'in', ('open', 'paid')),
             ('period_id', '=', period.id),
+            ('is_electronic', '=', False),
             ('company_id', '=', self.company_id.id),
             ('type', '=', 'out_invoice')
         ]
