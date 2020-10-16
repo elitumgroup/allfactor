@@ -392,6 +392,7 @@ class Ats(models.TransientModel):
         sql = "SELECT type, sum(amount_untaxed) AS base \
                           FROM account_invoice \
                           WHERE type IN ('out_invoice', 'out_refund') \
+                          AND is_electronic = false \
                           AND state IN ('open','paid') \
                           AND period_id = '%s' and company_id = '%s'" % (period.id, self.company_id.id)
         sql += " GROUP BY type;"
