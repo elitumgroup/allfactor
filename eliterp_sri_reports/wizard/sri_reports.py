@@ -281,7 +281,7 @@ class Ats(models.TransientModel):
                         }
                     temp[line.tax_id.code]['baseImpAir'] += line.base_taxable
                     temp[line.tax_id.code]['codRetAir'] = line.tax_id.code
-                    temp[line.tax_id.code]['porcentajeAir'] = int(line.tax_id.amount)
+                    temp[line.tax_id.code]['porcentajeAir'] = "{0:.2f}".format(line.tax_id.amount)
                     temp[line.tax_id.code]['valRetAir'] += abs(line.amount)
         for k, v in temp.items():
             v.update({
